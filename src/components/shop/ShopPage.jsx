@@ -13,25 +13,40 @@ const ShopPage = () => {
     useEffect(() => {
         FetchProcucts();
 
-    }, []);
+    }, [currentPage]);
 
-    const FetchProcucts=()=>{
-        // base url use reduce redundency
-        apiClient.get('/products/')
-            .then(res => {
-                // console.log(res.data.results);
-                setProducts(res.data.results);
+    // const FetchProcucts=()=>{
+    //     // base url use reduce redundency
+    //     apiClient.get(`/products/?page=${currentPage}`)
+    //         .then(res => {
+    //             // console.log(res.data.results);
+    //             setProducts(res.data.results);
 
-                setTotalPages(Math.ceil(res.data.count/res.data.results.length))
+    //             setTotalPages(Math.ceil(res.data.count/res.data.results.length))
 
-            })
-            .catch(err => {
-                console.error(err)
-                  setError(err.message)
-            })
-            .finally(() => {
-                  setLoading(false)
-            })
+    //         })
+    //         .catch(err => {
+    //             console.error(err)
+    //               setError(err.message)
+    //         })
+    //         .finally(() => {
+    //               setLoading(false)
+    //         })
+    // }
+
+    const FetchProcucts = async()=>{
+        try{
+            const response = await apiClient.get(`/products/?page=${currentPage}`)
+            const data = await response.data
+            setProducts(data.results)
+            setTotalPages(Math.ceil(data.count/data.results.length))
+        }
+        catch(error){
+            setError(error)
+        }
+        finally{
+            setLoading(false)
+        }
     }
     return (
         <section>
