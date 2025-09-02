@@ -1,13 +1,14 @@
 
 import HeroCarousel from '../components/Carosuel/HeroCarousel';
 import Features from '../components/Features';
+import Products from './Products';
 
 const Home = () => {
     return (
         <div>
             <HeroCarousel></HeroCarousel>
             <Features></Features>
-            <h1>this is home page</h1>
+            <Products></Products>
         </div>
     );
 };
