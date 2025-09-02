@@ -1,5 +1,5 @@
 import React from 'react';
-import bookImg from '../../assets/images/slider-image/book.jpeg'
+import bookImg from '../../../assets/images/slider-image/book.jpeg'
 import DiscountTimer from './DiscountTimer';
 const DiscountSection = () => {
     return (

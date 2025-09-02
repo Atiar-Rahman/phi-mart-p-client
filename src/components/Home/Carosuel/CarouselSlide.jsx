@@ -1,4 +1,4 @@
-import bgImg from "../../assets/images/slider-image/banner-image.png";
+import bgImg from "../../../assets/images/slider-image/banner-image.png";
 
 const CarouselSlide = ({ title, subtitle, image }) => {
   return (
