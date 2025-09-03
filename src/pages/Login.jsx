@@ -71,7 +71,7 @@ const Login = () => {
       <div className="text-center my-5">
         <h1>
           Don't have an account?{" "}
-          <NavLink className={"text-red-500"}>SignUp</NavLink>
+          <NavLink to='/register' className={"text-red-500"}>SignUp</NavLink>
         </h1>
       </div>
     </div>
