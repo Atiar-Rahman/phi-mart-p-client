@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const Login = () => {
   const { loginUser } = useAuthContext();
-  const [loading,setLoading] = useState(true)
+  const [loading,setLoading] = useState(false)
 //   for user navigate function call
   const navigate = useNavigate()
   const {
@@ -15,6 +15,7 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async(data) => {
+    setLoading(true)
     try{
         await loginUser(data)
     // when user login successful navigate this url

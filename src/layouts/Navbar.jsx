@@ -3,7 +3,11 @@ import useAuthContext from "../hooks/useAuthContext";
 import { NavLink } from "react-router";
 
 const Navbar = () => {
-    const {user} = useAuthContext()
+    const {user,logoutUser} = useAuthContext()
+
+    const handleLogout=()=>{
+      logoutUser()
+    }
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -144,7 +148,7 @@ const Navbar = () => {
                 <a>Settings</a>
               </li>
               <li>
-                <a>Logout</a>
+                <NavLink onClick={handleLogout}>Logut</NavLink>
               </li>
             </ul>
           </div>

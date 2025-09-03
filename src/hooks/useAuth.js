@@ -3,6 +3,7 @@ import apiClient from "../services/api-client";
 
 const useAuth = () => {
     const [user, setUser] = useState(null)
+    const [errorMes,setErrorMes] = useState('')
     const getToken = () => {
         const token = localStorage.getItem('authTokens');
         return token ? JSON.parse(token) : null;
@@ -45,7 +46,32 @@ const useAuth = () => {
         console.log("Login err",error.data?.response)
        }
     }
-    return {user, loginUser}
+    //  Registration user
+    const registeruser = async(userData)=>{
+        try{
+            await apiClient.post('/auth/users/',userData)
+            return {success:true,message:"Registration successful. check your email to activate your accounting Redirecting..."}
+        }catch(err){
+            console.log("register err", err)
+            if(err.response && err.response.data){
+                // field error show 
+            const errorMessage = Object.values(err.response.data).flat().join('\n')
+            setErrorMes(errorMessage)
+            }else{
+                setErrorMes("Registration faild.try again")
+            }
+            
+        }
+    }
+
+    //logout user
+    const logoutUser = ()=>{
+        setAuthTokens(null)
+        setUser(null)
+        localStorage.removeItem('authTokens')
+    }
+
+    return {user, errorMes, loginUser,registeruser,logoutUser}
 }
 
 export default useAuth;

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
+import useAuthContext from "../hooks/useAuthContext";
+import Error from "../components/Error";
+import Success from "../components/Success";
 
 const Register = () => {
   const {
@@ -9,14 +12,28 @@ const Register = () => {
     watch,
     formState: { errors },
   } = useForm();
-
-  const onSubmit = (data) => {
+  const { registeruser,errorMes } = useAuthContext()
+  const [successMes,setSuccessMes] = useState('')
+//   const navigate = useNavigate()
+  const onSubmit = async(data) => {
     delete data.confirm_password // delete confirm password 
     console.log("Form Data:", data);
+    try{
+        const response = await registeruser(data)
+        if(response.success){
+            setSuccessMes(response.message)
+            // setTimeout(()=>navigate('/login'),2000) // after 2s redirect the login page
+        }
+        
+    }catch(err){
+        console.log(err)
+    }
   };
 
   return (
     <div className="w-full md:w-1/2 mx-auto my-10">
+        {successMes && <Success success={successMes}></Success>}
+        {errorMes && <Error error={errorMes}></Error>}
       <h1 className="text-2xl font-bold text-center border-b-4 rounded-2xl border-amber-800 my-6">
         Please Sign Up
       </h1>
