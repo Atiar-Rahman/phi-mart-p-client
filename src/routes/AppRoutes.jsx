@@ -18,8 +18,8 @@ const AppRoutes = () => {
             <Route path='login' element={<Login></Login>}></Route>
             <Route path='register' element={<Register></Register>}></Route>
             <Route path='activate/:uid/:token' element={<ActivateAccount></ActivateAccount>}></Route>
-            <Route path='dashboard' element={<PrivateRoute><Dashboard></Dashboard></PrivateRoute>}></Route>
           </Route>
+          <Route path='dashboard' element={<PrivateRoute><Dashboard></Dashboard></PrivateRoute>}></Route>
         </Routes>
     );
 };
