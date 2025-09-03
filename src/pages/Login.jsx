@@ -1,10 +1,13 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import useAuthContext from "../hooks/useAuthContext";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 const Login = () => {
-  const { user,loginUser } = useAuthContext();
-
+  const { loginUser } = useAuthContext();
+  const [loading,setLoading] = useState(true)
+//   for user navigate function call
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -12,7 +15,16 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async(data) => {
-    await loginUser(data)
+    try{
+        await loginUser(data)
+    // when user login successful navigate this url
+    navigate('/dashboard')
+    }catch(err){
+        console.log("Login faild",err)
+    }finally{
+        setLoading(false)
+    }
+
   };
 
   return (
@@ -52,8 +64,8 @@ const Login = () => {
         </div>
         <input
           type="submit"
-          className="btn btn-outline bg-amber-700 mt-10 w-full rounded-xl text-white"
-          value="SignIn"
+          className="btn btn-outline bg-amber-700 mt-10 w-full rounded-xl text-white" disabled={loading}
+          value={loading? "Loggin in...": "Login"}
         />
       </form>
       <div className="text-center my-5">
