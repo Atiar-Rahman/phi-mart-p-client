@@ -5,7 +5,7 @@ const ProfileButton = ({ isEditing, setIsEditing }) => {
     <div className="flex justify-center pt-4">
       {isEditing ? (
         <div className="space-x-4">
-          <button className="btn btn-primary px-8">Save Changes</button>
+          <button type="submit" className="btn btn-primary px-8">Save Changes</button>
           <button
             onClick={() => setIsEditing(false)}
             className="btn btn-outline"

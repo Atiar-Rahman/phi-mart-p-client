@@ -30,6 +30,19 @@ const useAuth = () => {
         }
     }
 
+    // update user profile
+    const updateUserProfile=async(data)=>{
+        setErrorMes("")
+        try{
+            await apiClient.patch('/auth/users/me/',data,{
+                headers:{Authorization: `JWT ${authTokens?.access}`}
+            })
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
     // login user
     // here userData already object so, directly pass this object
     const loginUser = async (userData) => {
@@ -71,7 +84,7 @@ const useAuth = () => {
         localStorage.removeItem('authTokens')
     }
 
-    return {user, errorMes, loginUser,registeruser,logoutUser}
+    return {user, errorMes, loginUser,registeruser,logoutUser,updateUserProfile}
 }
 
 export default useAuth;
