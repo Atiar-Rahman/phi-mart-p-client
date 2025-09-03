@@ -1,0 +1,28 @@
+import React from "react";
+
+const ProfileButton = ({ isEditing, setIsEditing }) => {
+  return (
+    <div className="flex justify-center pt-4">
+      {isEditing ? (
+        <div className="space-x-4">
+          <button className="btn btn-primary px-8">Save Changes</button>
+          <button
+            onClick={() => setIsEditing(false)}
+            className="btn btn-outline"
+          >
+            Cancel
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => setIsEditing(true)}
+          className="btn btn-primary px-8"
+        >
+          Edit Profile
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default ProfileButton;
