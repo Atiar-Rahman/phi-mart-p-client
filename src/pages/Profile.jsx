@@ -13,7 +13,7 @@ const Profile = () => {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors,isSubmitting },
   } = useForm();
 
   const { user, updateUserProfile,changePassword,errorMes } = useAuthContext();
@@ -70,7 +70,7 @@ const Profile = () => {
             isEditing={isEditing}
             watch={watch}
           />
-          <ProfileButton isEditing={isEditing} setIsEditing={setIsEditing} />
+          <ProfileButton isEditing={isEditing} setIsEditing={setIsEditing}  isSubmitting={isSubmitting}/>
         </form>
       </div>
     </div>
