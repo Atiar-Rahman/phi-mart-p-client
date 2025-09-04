@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import apiClient from '../services/api-client'
 import authApiClient from '../services/auth-api-client';
 const useCart = () => {
@@ -52,6 +52,15 @@ const useCart = () => {
             console.log(err)
         }
     },[cartId])
+
+    useEffect(()=>{
+        const initilizeCart = async()=>{
+            await createORGetCart()
+
+        }
+        initilizeCart()
+    },[createORGetCart])
+
     return {cartId,cart,createORGetCart,AddCartItems,updateCartItemQuantity,deleteCartItems}
 };
 

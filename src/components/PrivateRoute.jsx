@@ -4,7 +4,7 @@ import { Navigate } from 'react-router';
 
 const PrivateRoute = ({children}) => {
     const {user} = useAuthContext()
-    console.log(user)
+    // console.log(user)
     // loading state so, user check 
     if(!user){
         return <p>loading</p>
