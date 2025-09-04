@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import apiClient from '../services/api-client'
 import authApiClient from '../services/auth-api-client';
 const useCart = () => {
@@ -8,7 +8,7 @@ const useCart = () => {
     const [cart,setCart] = useState(null)
     const [cardId,setCardId] = useState(()=>localStorage.getItem('cartId'))
     // create a new cart
-    const createORGetCart = async()=>{
+    const createORGetCart = useCallback(async()=>{
         try{
             const response = await authApiClient.post('/carts/',{})
             // console.log(response.data)
@@ -20,10 +20,10 @@ const useCart = () => {
         }catch(err){
             console.log(err)
         }
-    }
+    },[cardId])
 
     // add item to the cart
-    const AddCartItems = async(product_id,quantity)=>{
+    const AddCartItems = useCallback(async(product_id,quantity)=>{
         if(!cardId){
             await createORGetCart()
         }
@@ -33,7 +33,7 @@ const useCart = () => {
         }catch(err){
             console.log("error adding item",err)
         }
-    }
+    },[cardId,createORGetCart])
     return {cardId,cart,createORGetCart,AddCartItems}
 };
 

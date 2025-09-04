@@ -5,8 +5,9 @@ const Cart = () => {
     const { cart,createORGetCart } = useCartContext();
 
     useEffect(()=>{
+        console.log("he")
         createORGetCart();
-    },[])
+    },[createORGetCart])
     return (
         <div>
             {JSON.stringify(cart)}
