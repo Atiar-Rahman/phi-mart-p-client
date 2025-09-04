@@ -1,24 +1,34 @@
 import React from 'react';
  
 import defaultImage from "../../assets/default prduct image.png"
+import { Link } from 'react-router';
 const ProductItem = ({product}) => {
     return (
+      <Link to={`/shop/${product.id}`}>
         <div className="card bg-base-100 w-96 shadow-sm">
-            <figure className="px-10 pt-10">
-                <img
-                    src={product.images.length>0? product.images[0].image:defaultImage}
-                    alt={product.name}
-                    className="rounded-xl" />
-            </figure>
-            <div className="card-body items-center text-center">
-                <h2 className="card-title">{product.name}</h2>
-                <h3 className='font-bold text-xl text-red-700 my-2'>${product.price}</h3>
-                <p>{product.description}</p>
-                <div className="card-actions">
-                    <button className="btn btn-primary">Buy Now</button>
-                </div>
+          <figure className="px-10 pt-10">
+            <img
+              src={
+                product.images.length > 0
+                  ? product.images[0].image
+                  : defaultImage
+              }
+              alt={product.name}
+              className="rounded-xl"
+            />
+          </figure>
+          <div className="card-body items-center text-center">
+            <h2 className="card-title">{product.name}</h2>
+            <h3 className="font-bold text-xl text-red-700 my-2">
+              ${product.price}
+            </h3>
+            <p>{product.description}</p>
+            <div className="card-actions">
+              <button className="btn btn-primary">Buy Now</button>
             </div>
+          </div>
         </div>
+      </Link>
     );
 };
 

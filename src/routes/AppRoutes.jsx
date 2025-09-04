@@ -14,23 +14,35 @@ import ProductDetails from '../pages/ProductDetails';
 
 const AppRoutes = () => {
     return (
-        <Routes>
-          {/* public routes */}
-          <Route element={<MainLayout></MainLayout>}>
-            <Route path='/' element={<Home></Home>}></Route>
-            <Route path='shop' element={<Shop></Shop>}></Route>
-            <Route path='login' element={<Login></Login>}></Route>
-            <Route path='register' element={<Register></Register>}></Route>
-            <Route path='activate/:uid/:token' element={<ActivateAccount></ActivateAccount>}></Route>
-            <Route path='shop/:id' element={<ProductDetails></ProductDetails>}></Route>
-          </Route>
-          {/* private routes */}
-          <Route path='dashboard' element={<PrivateRoute><DashboardLayout/></PrivateRoute>}>
-            <Route index element={<Dashboard/>}></Route>
-            <Route path='profile' element={<Profile></Profile>}></Route>
-          </Route>
-          
-        </Routes>
+      <Routes>
+        {/* public routes */}
+        <Route element={<MainLayout></MainLayout>}>
+          <Route path="/" element={<Home></Home>}></Route>
+          <Route path="shop" element={<Shop></Shop>}></Route>
+          <Route path="login" element={<Login></Login>}></Route>
+          <Route path="register" element={<Register></Register>}></Route>
+          <Route
+            path="activate/:uid/:token"
+            element={<ActivateAccount></ActivateAccount>}
+          ></Route>
+          <Route
+            path="shop/:productId"
+            element={<ProductDetails></ProductDetails>}
+          ></Route>
+        </Route>
+        {/* private routes */}
+        <Route
+          path="dashboard"
+          element={
+            <PrivateRoute>
+              <DashboardLayout />
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<Dashboard />}></Route>
+          <Route path="profile" element={<Profile></Profile>}></Route>
+        </Route>
+      </Routes>
     );
 };
 
