@@ -9,7 +9,7 @@ import "swiper/css/pagination";
 import { Navigation, Thumbs } from "swiper/modules";
 
 import defaultImage from "../../assets/default prduct image.png";
-const ProductImageGalary = ({images,productName}) => {
+const ProductImageGallary = ({images,productName}) => {
     // eslint-disable-next-line no-unused-vars
     const [thumbsSwiper,setThumbsSwiper] = useState(null)
     const displayImages = images.length > 0 ? images : [defaultImage];
@@ -33,4 +33,4 @@ const ProductImageGalary = ({images,productName}) => {
   );
 };
 
-export default ProductImageGalary;
+export default ProductImageGallary;
