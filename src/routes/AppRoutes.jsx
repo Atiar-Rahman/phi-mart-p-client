@@ -11,6 +11,7 @@ import ActivateAccount from '../components/Registration/ActivateAccount';
 import DashboardLayout from '../layouts/DashboardLayout';
 import Profile from '../pages/Profile';
 import ProductDetails from '../pages/ProductDetails';
+import Cart from '../pages/Cart';
 
 const AppRoutes = () => {
     return (
@@ -41,6 +42,7 @@ const AppRoutes = () => {
         >
           <Route index element={<Dashboard />}></Route>
           <Route path="profile" element={<Profile></Profile>}></Route>
+          <Route path='cart' element={<Cart></Cart>}></Route>
         </Route>
       </Routes>
     );
