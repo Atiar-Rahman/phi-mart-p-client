@@ -4,7 +4,19 @@ import authApiClient from "../services/auth-api-client";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-
+      const handleCancelOrder = async (orderId) => {
+        try {
+          const response = await authApiClient.post(
+            `/orders/${orderId}/cancel/`
+          );
+          // console.log(response);
+          if(response.status === 200){
+            setOrders(prevOrder =>prevOrder.map(order => order.id===orderId ? {...order,status:'Cancceled'}:order))
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
   useEffect(() => {
     authApiClient.get('/orders')
     .then(res=>{
@@ -19,7 +31,7 @@ const Orders = () => {
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
-        orders.map((order) => <OrderCart key={order.id} order={order} />)
+        orders.map((order) => <OrderCart key={order.id} onCancel={handleCancelOrder} order={order} />)
       )}
     </div>
   );

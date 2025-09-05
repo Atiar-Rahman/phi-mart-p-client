@@ -17,6 +17,7 @@ const Sidebar = () => {
     { to: "/dashboard/cart", icon: FiBarChart2, label: "Carts" },
     { to: "/dashboard/orders", icon: FiBarChart2, label: "Orders" },
     { to: "/reviews", icon: FiStar, label: "Reviews" },
+    { to: "/shop", icon: FiStar, label: "shop" },
   ];
   const adminMenus = [
     { to: "/dashboard", icon: FiShoppingCart, label: "Dashboard" },
@@ -39,9 +40,11 @@ const MenuItems = user.is_staff? adminMenus :customerMenus
       ></label>
       <aside className="menu bg-base-200 w-64 min-h-full p-4 text-base-content">
         {/* Sidebar header */}
-        <div className="flex items-center gap-2 mb-6 px-2">
-          <FiShoppingCart className="h-6 w-6" />
-          <h1 className="text-xl font-bold">PhiMart</h1>
+        <div>
+          <Link to="/" className="flex items-center gap-2 mb-6 px-2">
+            <FiShoppingCart className="h-6 w-6" />
+            <h1 className="text-xl font-bold">PhiMart</h1>
+          </Link>
         </div>
 
         {/* Sidebar menu */}
