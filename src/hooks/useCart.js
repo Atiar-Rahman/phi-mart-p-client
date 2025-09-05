@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
+
 
 import React, { useCallback, useEffect, useState } from 'react';
-import apiClient from '../services/api-client'
+
 import authApiClient from '../services/auth-api-client';
 const useCart = () => {
-    const [authToken, setAuthToken] = useState(()=>JSON.parse(localStorage.getItem('authTokens')).access)
-    const [cart,setCart] = useState(null)
+    const [cart, setCart] = useState([]);
     const [cartId,setCartId] = useState(()=>localStorage.getItem('cartId'))
     // create a new cart
     const createORGetCart = useCallback(async()=>{

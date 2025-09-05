@@ -1,8 +1,18 @@
-const CartSummary = ({ totalPrice, itemCount }) => {
+import authApiClient from "../../services/auth-api-client";
+
+const CartSummary = ({ totalPrice, itemCount, cartId }) => {
   const shipping = itemCount == 0 || parseFloat(totalPrice) > 100 ? 0 : 10;
   const tax = parseFloat(totalPrice) * 0.1;
   const orderTotal = parseFloat(totalPrice) + shipping + tax;
 
+  const createOrder = async () => {
+    try {
+      const order = await authApiClient.post("/orders", { cart_id: cartId });
+      console.log(order)
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
@@ -28,7 +38,7 @@ const CartSummary = ({ totalPrice, itemCount }) => {
           </div>
         </div>
         <div className="card-actions justify-end mt-4">
-          <button className="btn btn-primary w-full">
+          <button onClick={createOrder} className="btn btn-primary w-full">
             Proceed to Checkout
           </button>
         </div>
