@@ -1,10 +1,25 @@
+import { useState } from "react";
 import useAuthContext from "../../hooks/useAuthContext";
 import OrderTable from "./OrderTable";
+import authApiClient from "../../services/auth-api-client";
 
 
 const OrderCart = ({order,onCancel}) => {
     const {user} = useAuthContext()
-
+    const [status,setStatus] = useState(order.status)
+  const handleStatusChange = async(event)=>{
+    const newStatus = event.target.value;
+    try{
+      const response = await authApiClient.patch(`/orders/${order.id}/update_status/`,{status:newStatus})
+      if(response.status===200){
+        setStatus(newStatus)
+      }
+      // console.log(response)
+      alert(response.data.status)
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-lg mb-8 overflow-hidden">
@@ -14,16 +29,37 @@ const OrderCart = ({order,onCancel}) => {
           <p className="text-gray-600 text-sm">Placed on {order.created_at}</p>
         </div>
         <div className="flex gap-2">
-          <span
-            className={`px-3 py-1 rounded-full text-white text-sm font-medium ${
-              order.status === "Not Paid" ? "bg-red-500" : "bg-green-500"
-            }`}
-          >
-            {order.status}
-          </span>
-          {order.status !== "Deliverd" && order.status !== 'Canceled' && (
-            <button onClick={()=>onCancel(order.id)} className="text-blue-700 hover:underline cursor-pointer">Cancel</button>
+          {user.is_staff ? (
+            <select
+              value={status}
+              onChange={handleStatusChange}
+              className="px-3 py-1 rounded-full text-white text-sm font-medium bg-blue-300"
+            >
+              <option value="Not Paid"> Not Paid</option>
+              <option value="Ready To Ship"> Ready To Ship</option>
+              <option value="Shipped"> Shipped</option>
+              <option value="Delivered"> Delivered</option>
+              <option value="Candeled"> Canceled</option>
+            </select>
+          ) : (
+            <span
+              className={`px-3 py-1 rounded-full text-white text-sm font-medium ${
+                order.status === "Not Paid" ? "bg-red-500" : "bg-green-500"
+              }`}
+            >
+              {order.status}
+            </span>
           )}
+          {order.status !== "Deliverd" &&
+            order.status !== "Canceled" &&
+            !user.is_staff && (
+              <button
+                onClick={() => onCancel(order.id)}
+                className="text-blue-700 hover:underline cursor-pointer"
+              >
+                Cancel
+              </button>
+            )}
         </div>
       </div>
       <div className="p-6">
@@ -46,7 +82,7 @@ const OrderCart = ({order,onCancel}) => {
             <span>${order.total_price.toFixed(2)}</span>
           </div>
         </div>
-        {(!user.is_staff && order.status === "Not Paid") && (
+        {!user.is_staff && order.status === "Not Paid" && (
           <button className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
             Pay Now
           </button>
