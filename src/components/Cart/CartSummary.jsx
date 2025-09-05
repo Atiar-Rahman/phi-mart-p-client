@@ -1,26 +1,54 @@
+import React from "react";
 import authApiClient from "../../services/auth-api-client";
 
 const CartSummary = ({ totalPrice, itemCount, cartId }) => {
-  const shipping = itemCount == 0 || parseFloat(totalPrice) > 100 ? 0 : 10;
+  const shipping = itemCount === 0 || parseFloat(totalPrice) > 100 ? 0 : 10;
   const tax = parseFloat(totalPrice) * 0.1;
   const orderTotal = parseFloat(totalPrice) + shipping + tax;
 
-  const createOrder = async () => {
+  const deleteCart = async () => {
+    if (!cartId) return;
     try {
-      const order = await authApiClient.post("/orders", { cart_id: cartId });
-      console.log(order)
-    } catch (err) {
-      console.log(err);
+      const response = await authApiClient.delete(`/carts/${cartId}`);
+      console.log("Cart deleted:", response.data);
+      localStorage.removeItem("cartId");
+    } catch (error) {
+      console.error(
+        "Failed to delete cart:",
+        error.response?.data || error.message
+      );
     }
   };
+
+const createOrder = async () => {
+  if (!cartId) {
+    console.error("No cart ID provided");
+    return;
+  }
+
+  try {
+    const order = await authApiClient.post("/orders/", { cart_id: cartId });
+    console.log("Order created:", order.data);
+    await deleteCart();
+    alert("Order created successfully!");
+  } catch (error) {
+    console.error(
+      "Order creation failed:",
+      error.response?.data || error.message
+    );
+    alert("Failed to create order. See console for details.");
+  }
+};
+
+
   return (
-    <div className="card bg-base-100 shadow-xl">
+    <div className="card bg-base-100 shadow-xl p-4">
       <div className="card-body">
         <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
         <div className="space-y-2">
           <div className="flex justify-between">
-            <span className="text-gray-500">Subtotal {itemCount} items</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span className="text-gray-500">Subtotal ({itemCount} items)</span>
+            <span>${parseFloat(totalPrice).toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500">Shipping</span>
@@ -38,7 +66,11 @@ const CartSummary = ({ totalPrice, itemCount, cartId }) => {
           </div>
         </div>
         <div className="card-actions justify-end mt-4">
-          <button onClick={createOrder} className="btn btn-primary w-full">
+          <button
+            disabled={itemCount === 0}
+            onClick={createOrder}
+            className="btn btn-primary w-full"
+          >
             Proceed to Checkout
           </button>
         </div>

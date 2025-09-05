@@ -6,7 +6,7 @@ import CartSummary from "../components/Cart/CartSummary";
 const Cart = () => {
   const {
     cartId,cart,
-    createORGetCart,
+    createOrGetCart,
     updateCartItemQuantity,
     deleteCartItems,
   } = useCartContext();
@@ -14,8 +14,8 @@ const Cart = () => {
   // console.log(localCart)
   useEffect(() => {
     // console.log("he")
-    createORGetCart();
-  }, [createORGetCart]);
+    createOrGetCart();
+  }, [createOrGetCart]);
 
   useEffect(() => {
     setLocalCart(cart);
