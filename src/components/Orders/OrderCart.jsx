@@ -7,6 +7,7 @@ import authApiClient from "../../services/auth-api-client";
 const OrderCart = ({order,onCancel}) => {
     const {user} = useAuthContext()
     const [status,setStatus] = useState(order.status)
+    const [loading,setLoading] = useState(false)
   const handleStatusChange = async(event)=>{
     const newStatus = event.target.value;
     try{
@@ -18,6 +19,25 @@ const OrderCart = ({order,onCancel}) => {
       alert(response.data.status)
     }catch(err){
       console.log(err)
+    }
+  }
+
+  const handlePayment = async()=>{
+    setLoading(true)
+    try{
+      const response = await authApiClient.post('/payment/initiate/',{amount:order.total_price,orderId:order.id,numItems:order.items?.length})
+      console.log(response)
+      if (response.data.payment_url){
+          setLoading(false)
+          window.location.href = response.data.payment_url;
+      }else{
+        alert("payment failed")
+      }
+      
+    }catch(err){
+      console.log(err)
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -83,8 +103,8 @@ const OrderCart = ({order,onCancel}) => {
           </div>
         </div>
         {!user.is_staff && order.status === "Not Paid" && (
-          <button className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
-            Pay Now
+          <button onClick={handlePayment} disabled={loading}  className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+            {loading?"processing":"paynow"}
           </button>
         )}
       </div>
