@@ -13,50 +13,75 @@ const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [productId, setProductId] = useState(null);
   const [previewImages, setPreviewImages] = useState([]);
-  // Fetch Categories
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch categories
   useEffect(() => {
-    apiClient.get("/categories/").then((res) => {
-      console.log(res.data);
-      setCategories(res.data);
-    });
+    apiClient.get("/categories/").then((res) => setCategories(res.data));
   }, []);
 
-  // Submit Product Details
+  // Submit product
   const handleProductAdd = async (data) => {
     try {
-      const productRes = await authApiClient.post("/products/", data);
-      console.log(productRes.data);
-      setProductId(productRes.data.id);
-    } catch (error) {
-      console.log("Error adding product", error);
+      const res = await authApiClient.post("/products/", data);
+      setProductId(res.data.id);
+    } catch (err) {
+      console.error("Error adding product:", err.response?.data || err.message);
+      alert("Failed to add product");
     }
   };
-  //   handle image change
-  // when work image than event is better for hook form
+
+  // Image selection
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    console.log(files);
-    setPreviewImages(
-      files.map((file) => {
-        URL.createObjectURL(file); //create image object url
-      })
-    );
+    setImages(files);
+    setPreviewImages(files.map((file) => URL.createObjectURL(file))); // <-- fix
   };
+
+  // Image upload
+  const handleUpload = async () => {
+    if (!images.length) return alert("Please select images.");
+    setLoading(true);
+
+    try {
+      for (const image of images) {
+        const formData = new FormData();
+        formData.append("image", image);
+
+        const res = await authApiClient.post(
+          `/products/${productId}/images/`,
+          formData);
+        console.log("Upload success:", res.data);
+      }
+
+      alert("Images uploaded successfully");
+      setImages([]);
+      setPreviewImages([]);
+    } catch (err) {
+      console.error(
+        "Error uploading images:",
+        err.response?.data || err.message
+      );
+      alert("Failed to upload images");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-semibold mb-4">Add New Product</h2>
-      {productId ? (
+
+      {!productId ? (
         <form onSubmit={handleSubmit(handleProductAdd)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Product Name</label>
+            <label className="block text-sm font-medium">Name</label>
             <input
               {...register("name", { required: true })}
               className="input input-bordered w-full"
-              placeholder="Product Name"
             />
-            {errors.name && (
-              <p className="text-red-500 text-xs">This field is required</p>
-            )}
+            {errors.name && <p className="text-red-500 text-xs">Required</p>}
           </div>
 
           <div>
@@ -64,46 +89,32 @@ const AddProduct = () => {
             <textarea
               {...register("description", { required: true })}
               className="textarea textarea-bordered w-full"
-              placeholder="Description"
-            ></textarea>
+            />
             {errors.description && (
-              <p className="text-red-500 text-xs">This field is required</p>
+              <p className="text-red-500 text-xs">Required</p>
             )}
           </div>
 
           <div>
             <label className="block text-sm font-medium">Price</label>
             <input
-              type="text"
-              {...register("price", {
-                required: "This Field is required",
-                validate: (value) => {
-                  const parsedValue = parseFloat(value);
-                  return !isNaN(parsedValue) || "Please enter a valid number!";
-                },
-              })}
+              type="number"
+              {...register("price", { required: true })}
               className="input input-bordered w-full"
-              placeholder="Price"
             />
-            {errors.price && (
-              <p className="text-red-500 text-xs">{errors.price.message}</p>
-            )}
+            {errors.price && <p className="text-red-500 text-xs">Required</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Stock Quantity</label>
+            <label className="block text-sm font-medium">Stock</label>
             <input
               type="number"
               {...register("stock", { required: true })}
               className="input input-bordered w-full"
-              placeholder="Stock"
             />
-            {errors.stock && (
-              <p className="text-red-500 text-xs">This field is required</p>
-            )}
+            {errors.stock && <p className="text-red-500 text-xs">Required</p>}
           </div>
 
-          {/* Dropdown for categories */}
           <div>
             <label className="block text-sm font-medium">Category</label>
             <select
@@ -118,7 +129,7 @@ const AddProduct = () => {
               ))}
             </select>
             {errors.category && (
-              <p className="text-red-500 text-xs">This field is required</p>
+              <p className="text-red-500 text-xs">Required</p>
             )}
           </div>
 
@@ -128,7 +139,7 @@ const AddProduct = () => {
         </form>
       ) : (
         <div>
-          <h3 className="text-lg font-medium mb-2">Upload product Images</h3>
+          <h3 className="text-lg font-medium mb-2">Upload Product Images</h3>
           <input
             type="file"
             multiple
@@ -136,6 +147,7 @@ const AddProduct = () => {
             className="file-input file-input-bordered w-full"
             onChange={handleImageChange}
           />
+
           {previewImages.length > 0 && (
             <div className="flex gap-2 mt-2">
               {previewImages.map((src, idx) => (
@@ -143,13 +155,19 @@ const AddProduct = () => {
                   key={idx}
                   src={src}
                   alt="Preview"
-                  className="w-16 h-16 rounded-md object-cover"
+                  className="w-16 h-16 object-cover rounded-md"
                 />
               ))}
             </div>
           )}
 
-          <button className="btn btn-primary w-full mt-2">Upload Images</button>
+          <button
+            onClick={handleUpload}
+            className="btn btn-primary w-full mt-2"
+            disabled={loading}
+          >
+            {loading ? "Uploading..." : "Upload Images"}
+          </button>
         </div>
       )}
     </div>
