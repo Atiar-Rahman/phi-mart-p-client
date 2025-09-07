@@ -5,6 +5,7 @@ import { Suspense, useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import AddToCartButton from "../components/ProductDetails/AddToCartButton";
 import ProductImageGallary from "../components/ProductDetails/ProductImageGallary";
+import ReviewSection from "../components/Reviews/ReviewSection";
 
 const ProductDetails = () => {
   const [product, setProduct] = useState(null);
@@ -90,6 +91,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+      <ReviewSection></ReviewSection>
     </div>
   );
 };
