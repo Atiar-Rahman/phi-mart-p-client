@@ -14,6 +14,7 @@ import ProductDetails from '../pages/ProductDetails';
 import Cart from '../pages/Cart';
 import Order from '../pages/Orders';
 import PaymentSuccess from '../pages/PaymentSuccess';
+import AddProduct from '../pages/AddProduct';
 
 const AppRoutes = () => {
     return (
@@ -44,9 +45,13 @@ const AppRoutes = () => {
         >
           <Route index element={<Dashboard />}></Route>
           <Route path="profile" element={<Profile></Profile>}></Route>
-          <Route path='cart' element={<Cart></Cart>}></Route>
-          <Route path='orders' element={<Order></Order>}></Route>
-          <Route path='payment/success/' element={<PaymentSuccess></PaymentSuccess>}></Route>
+          <Route path="cart" element={<Cart></Cart>}></Route>
+          <Route path="orders" element={<Order></Order>}></Route>
+          <Route
+            path="payment/success/"
+            element={<PaymentSuccess></PaymentSuccess>}
+          ></Route>
+          <Route path="products/add" element={<AddProduct />} />
         </Route>
       </Routes>
     );
